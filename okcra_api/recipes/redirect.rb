@@ -1,3 +1,5 @@
+Chef::Log.debug("calling redirect recipe")
+
 file "/tmp/something.txt" do
   owner "root"
   group "root"
