@@ -1,4 +1,4 @@
-Chef::Log.debug("calling redirect recipe")
+Chef::Log.debug("in redirect recipe")
 
 file "/tmp/something.txt" do
   owner "root"

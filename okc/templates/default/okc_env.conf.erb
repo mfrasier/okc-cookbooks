@@ -1,6 +1,6 @@
 # environment variables for okc app, as apache Env
-node[:okc][:env].each do |key, value|
-  Env <%= key %> "<%= value %>"
-end
+#node[:okc][:env].each do |key, value|
+#  Env <%= key %> "<%= value %>"
+#end
 
 Env stack_name "<%= @stack_name %>"
