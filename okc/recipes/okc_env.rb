@@ -1,5 +1,3 @@
-include_recipe 'apache2'
-
 # write file to import environment varibles into apache
 node[:deploy].each do |application, deploy|
   if deploy[:application_type] != 'php'
@@ -13,11 +11,12 @@ node[:deploy].each do |application, deploy|
 
   template "#{deploy[:deploy_to]}/shared/config/okc_env.conf" do
   	source 'okc_env.conf.erb'
-    mode '0660'
+    mode '0640'
     owner deploy[:user]
     group deploy[:group]
     variables(
       :database => deploy[:database],
+      :apache => node[:apache],
       :okc => node[:okc],
       :layers => node[:opsworks][:layers],
       :stack_name => node[:opsworks][:stack][:name]
