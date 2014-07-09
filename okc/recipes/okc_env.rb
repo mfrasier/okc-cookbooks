@@ -14,11 +14,11 @@ node[:deploy].each do |application, deploy|
     mode '0640'
     owner deploy[:user]
     group deploy[:group]
-    variables (
+    variables ({
       :deploy => deploy,
       :okc => node[:okc],
       :stack_name => node[:opsworks][:stack][:name]
-    )
+    })
     only_if do
       File.exists?("#{deploy[:deploy_to]}/shared/config")
     end
