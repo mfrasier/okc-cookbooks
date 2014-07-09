@@ -1,3 +1,3 @@
-Chef::Log.debug("inside okcra_api default recipe")
-include_recipe okcra_api::redirect
-include_recipe okcra_api::okc_env
+Chef::Log.debug("inside okc default recipe")
+include_recipe okc::redirect
+include_recipe okc::okc_env
