@@ -1,32 +1,44 @@
 Chef::Log.info("I am a message from the #{recipe_name} recipe in the #{cookbook_name} cookbook.")
 
 include_recipe 'apache2'
-include_recipe okc::okc_env
+include_recipe 'okc::okc_env'
 
-application_name = deploy[:domains].first
-rewrite_config = "#{node[:apache][:dir]}/sites-available/#{application_name}.conf.d/rewrite"
-local_config = "#{node[:apache][:dir]}/sites-available/#{application_name}.conf.d/local"
+# write apache config files
+node[:deploy].each do |application, deploy|
+  rewrite_config = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/rewrite"
+  local_config = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/local"
+  rewrite_config_ssl = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/rewrite-ssl"
+  local_config_ssl = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/local-ssl"
+  
+  # create extra config dirs
+  [rewrite_config, local_config, rewrite_config_ssl, local_config_ssl].each do |dir|
+    directory dir do
+  	  owner 'root'
+  	  group 'root'
+  	  mode  '0644'
+  	  action :create
+  	end
+  end
+  
+  # permanent redirect from http to https
+  template "#{local_config}/redirect.conf" do
+  	source 'redirect.conf.erb'
+    owner 'root'
+    group 'root'
+    mode  '0644'
+    variables ({
+    	:deploy => deploy,
+    	:application => application
+    })
+    action :create
+  end
 
-# create extra config dirs
-directory rewrite_config do
-	owner 'root'
-	group 'root'
-	mode  '0644'
-	action :create
-end
-
-directory local_config do
-	owner 'root'
-	group 'root'
-	mode 00644
-	action :create
-end
-
-# create permanent redirect from http to https
-file "#{local_config}/redirect.conf" do
-  owner "root"
-  group "root"
-  mode "0644"
-  content "Redirect permanent / https://api.okcra.org/\n"
-  action :create
+  # rewrite /* to /index.php/*
+  template "#{rewrite_config_ssl}/rewrite.conf" do
+  	source 'rewrite.conf.erb'
+    owner 'root'
+    group 'root'
+    mode  '0644'
+    action :create
+  end
 end

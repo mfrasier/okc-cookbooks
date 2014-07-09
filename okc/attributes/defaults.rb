@@ -1,4 +1,12 @@
 default[:okc][:env][:OKC_APP_ENVIRONMENT] = 'none'
+
+#default[:okc][:env][:DB_HOST] = 'none'
+#default[:okc][:env][:DB_PORT] = 'none'
+#default[:okc][:env][:DB_NAME] = 'none'
+#default[:okc][:env][:DB_USER] = 'none'
+#default[:okc][:env][:DB_PASSWORD] = 'none'
+#default[:okc][:env][:DB_SCHEMA] = 'none'
+
 default[:okc][:env][:SERVICE_GOOGLE_APP_NAME] = 'OKCRA Development'
 default[:okc][:env][:SERVICE_GOOGLE_CLIENT_ID] = ''
 default[:okc][:env][:SERVICE_GOOGLE_CLIENT_SECRET] = ''

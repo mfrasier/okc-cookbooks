@@ -7,18 +7,16 @@ node[:deploy].each do |application, deploy|
 
   # write out okc_env.conf
   Chef::Log.info("deploying okc_env for application #{application}")
-  Chef::Log.info("deploy json: #{deploy.to_s}")
+  #Chef::Log.info("deploy json: #{deploy.to_s}")
 
   template "#{deploy[:deploy_to]}/shared/config/okc_env.conf" do
   	source 'okc_env.conf.erb'
     mode '0640'
     owner deploy[:user]
     group deploy[:group]
-    variables(
-      :database => deploy[:database],
-      :apache => node[:apache],
+    variables (
+      :deploy => deploy,
       :okc => node[:okc],
-      :layers => node[:opsworks][:layers],
       :stack_name => node[:opsworks][:stack][:name]
     )
     only_if do

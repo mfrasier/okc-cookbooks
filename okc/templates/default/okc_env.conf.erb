@@ -3,5 +3,14 @@
 Env <%= key %> "<%= value %>"
 <% end -%>
 
+Env APP_NAME "<%= @application %>"
 Env OKC_STACK_NAME "<%= @stack_name %>"
-Env apache_dir "<%= @apache[:dir] %>"
+Env APP_DEPLOY_TIME "<%= Time.new %>"
+
+Env DB_HOST "<%= @deploy[:database]['host'] %>"
+Env DB_PORT "<%= @deploy[:database]['port'] %>"
+Env DB_NAME "<%= @deploy[:database]['database'] %>"
+Env DB_USER "<%= @deploy[:database]['username'] %>"
+Env DB_PASSWORD "<%= @deploy[:database]['password'] %>"
+Env DB_TYPE "<%= @deploy[:database]['type'] %>"
+Env DB_SCHEMA "public"
