@@ -1,12 +1,16 @@
 # environment variables for okc app, as apache Env
+
+# generated from node[:okc][:env]
 <% node[:okc][:env].each do |key, value| -%>
 Env <%= key %> "<%= value %>"
 <% end -%>
 
+# generated from application
 Env APP_NAME "<%= @application %>"
-Env OKC_STACK_NAME "<%= @stack_name %>"
+Env OKC_STACK_NAME "<%= node[:opsworks][:stack][:name] %>"
 Env APP_DEPLOY_TIME "<%= Time.new %>"
 
+# generated from @deploy[:database] values
 Env DB_HOST "<%= @deploy[:database]['host'] %>"
 Env DB_PORT "<%= @deploy[:database]['port'] || 5432 %>"
 Env DB_NAME "<%= @deploy[:database]['database'] %>"
