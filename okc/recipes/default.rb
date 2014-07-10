@@ -4,24 +4,16 @@ include_recipe 'apache2'
 include_recipe 'okc::okc_env'
 
 # write apache config files
+# /etc/httpd/sites-available/#{application}.conf Include directives:
+#  Include /etc/httpd/sites-available/okcra_api.conf.d/rewrite[-ssl]*
+#  Include /etc/httpd/sites-available/okcra_api.conf.d/local[-ssl]*
 node[:deploy].each do |application, deploy|
-  rewrite_config = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/rewrite"
-  local_config = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/local"
-  rewrite_config_ssl = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/rewrite-ssl"
-  local_config_ssl = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d/local-ssl"
-  
-  # create extra config dirs
-  [rewrite_config, local_config, rewrite_config_ssl, local_config_ssl].each do |dir|
-    directory dir do
-  	  owner 'root'
-  	  group 'root'
-  	  mode  '0644'
-  	  action :create
-  	end
-  end
+  # directory to drop config files into
+  # ensure names are local[-ssl]* or rewrite[-ssl]*
+  vhost_config_dir = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d"
   
   # permanent redirect from http to https
-  template "#{local_config}/redirect.conf" do
+  template "#{vhost_config_dir}/local_redirect2https.conf" do
   	source 'redirect.conf.erb'
     owner 'root'
     group 'root'
@@ -31,14 +23,16 @@ node[:deploy].each do |application, deploy|
     	:application => application
     })
     action :create
+    notifies :restart, "service[apache2]"
   end
 
   # rewrite /* to /index.php/*
-  template "#{rewrite_config_ssl}/rewrite.conf" do
+  template "#{vhost_config_dir}/rewrite-ssl.conf" do
   	source 'rewrite.conf.erb'
     owner 'root'
     group 'root'
     mode  '0644'
     action :create
+    notifies :restart, "service[apache2]"
   end
 end

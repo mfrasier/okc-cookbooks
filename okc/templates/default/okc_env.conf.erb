@@ -8,7 +8,7 @@ Env OKC_STACK_NAME "<%= @stack_name %>"
 Env APP_DEPLOY_TIME "<%= Time.new %>"
 
 Env DB_HOST "<%= @deploy[:database]['host'] %>"
-Env DB_PORT "<%= @deploy[:database]['port'] %>"
+Env DB_PORT "<%= @deploy[:database]['port'] || 5432 %>"
 Env DB_NAME "<%= @deploy[:database]['database'] %>"
 Env DB_USER "<%= @deploy[:database]['username'] %>"
 Env DB_PASSWORD "<%= @deploy[:database]['password'] %>"
