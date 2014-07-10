@@ -11,6 +11,13 @@ node[:deploy].each do |application, deploy|
   # directory to drop config files into
   # ensure names are local[-ssl]* or rewrite[-ssl]*
   vhost_config_dir = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d"
+
+  directory vhost_config_dir do
+  	owner 'root'
+    group 'root'
+    mode  '0644'
+    action :create
+  end
   
   # permanent redirect from http to https
   template "#{vhost_config_dir}/local_redirect2https.conf" do
