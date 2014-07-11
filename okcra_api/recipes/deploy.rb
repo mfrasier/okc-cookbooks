@@ -70,15 +70,15 @@ node[:deploy].each do |application, deploy|
 
   # create deploy_dir/app/storge/logs/laravel.log
   directory "#{deploy['deploy_to']}/app/storage/logs" do
-  	owner [:apache][:user]
-  	group [:apache][:group]
+  	owner node[:apache][:user]
+  	group node[:apache][:group]
   	mode "0755"
   	action :create
   end
 
   file "#{deploy['deploy_to']}/app/storage/logs/laravel.log" do
-  	owner [:apache][:user]
-  	group [:apache][:group]
+  	owner node[:apache][:user]
+  	group node[:apache][:group]
   	mode "0755"
   	action :create
   end
