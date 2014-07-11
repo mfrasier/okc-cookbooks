@@ -2,19 +2,19 @@
 
 # generated from node[:okc][:env]
 <% node[:okcra][:env].each do |key, value| -%>
-Env <%= key %> "<%= value %>"
+SetEnv <%= key %> "<%= value %>"
 <% end -%>
 
 # generated from application
-Env APP_NAME "<%= @application %>"
-Env OKC_STACK_NAME "<%= node[:opsworks][:stack][:name] %>"
-Env APP_DEPLOY_TIME "<%= Time.new %>"
+SetEnv APP_NAME "<%= @application %>"
+SetEnv OKC_STACK_NAME "<%= node[:opsworks][:stack][:name] %>"
+SetEnv APP_DEPLOY_TIME "<%= Time.new %>"
 
 # generated from @deploy[:database] values
-Env DB_HOST "<%= @deploy[:database]['host'] %>"
-Env DB_PORT "<%= @deploy[:database]['port'] || 5432 %>"
-Env DB_NAME "<%= @deploy[:database]['database'] %>"
-Env DB_USER "<%= @deploy[:database]['username'] %>"
-Env DB_PASSWORD "<%= @deploy[:database]['password'] %>"
-Env DB_TYPE "<%= @deploy[:database]['type'] %>"
-Env DB_SCHEMA "public"
+SetEnv DB_HOST "<%= @deploy[:database]['host'] %>"
+SetEnv DB_PORT "<%= @deploy[:database]['port'] || 5432 %>"
+SetEnv DB_NAME "<%= @deploy[:database]['database'] %>"
+SetEnv DB_USER "<%= @deploy[:database]['username'] %>"
+SetEnv DB_PASSWORD "<%= @deploy[:database]['password'] %>"
+SetEnv DB_TYPE "<%= @deploy[:database]['type'] %>"
+SetEnv DB_SCHEMA "public"
