@@ -1,7 +1,7 @@
 # environment variables for okc app, as apache Env
 
 # generated from node[:okc][:env]
-<% node[:okc][:env].each do |key, value| -%>
+<% node[:okcra][:env].each do |key, value| -%>
 Env <%= key %> "<%= value %>"
 <% end -%>
 

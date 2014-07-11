@@ -29,9 +29,8 @@ node[:deploy].each do |application, deploy|
     owner deploy[:user]
     group deploy[:group]
     variables ({
-      :deploy => deploy,
-      :okc => node[:okc],
-      :stack_name => node[:opsworks][:stack][:name]
+      :application => application,
+      :deploy => deploy
     })
     only_if do
       File.exists?("#{deploy[:deploy_to]}/shared/config")
@@ -45,8 +44,8 @@ node[:deploy].each do |application, deploy|
     group 'root'
     mode  '0644'
     variables ({
-    	:deploy => deploy,
-    	:application => application
+      :application => application,
+    	:deploy => deploy
     })
     action :create
     notifies :restart, "service[apache2]"
