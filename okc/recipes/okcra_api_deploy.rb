@@ -52,7 +52,7 @@ node[:deploy].each do |application, deploy|
     notifies :restart, "service[apache2]"
   end
 
-  # rewrite /* to /index.php/*
+  # rewrite (.*) to /index.php$1
   template "#{vhost_config_dir}/rewrite-ssl.conf" do
   	source 'rewrite.conf.erb'
     owner 'root'
@@ -61,4 +61,27 @@ node[:deploy].each do |application, deploy|
     action :create
     notifies :restart, "service[apache2]"
   end
+
+  # enable php5 mcrypt module for laravel
+  execute "php5enmod mcrypt" do
+   	command "php5enmod mcrypt"
+   	#creates "/etc/php5/apache2/conf.d/20-mcrypt,ini on ubutnu"
+   	action :run
+   end
+
+  # create deploy_dir/app/storge/logs/laravel.log
+  directory "#{deploy['deploy_to']}/app/storage/logs" do
+  	owner [:apache][:user]
+  	group [:apache][:group]
+  	mode "0755"
+  	action :create
+  end
+
+  file "#{deploy['deploy_to']}/app/storage/logs/laravel.log" do
+  	owner [:apache][:user]
+  	group [:apache][:group]
+  	mode "0755"
+  	action :create
+  end
+
 end
