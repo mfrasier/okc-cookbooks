@@ -2,6 +2,12 @@ Chef::Log.info("I am a message from the #{recipe_name} recipe in the #{cookbook_
 
 include_recipe 'apache2'
 
+# install any packages needed
+'install php5-pgsql package' do
+  package "php5-pgsql" do
+    action :install
+end  
+
 # write apache config files
 # /etc/httpd/sites-available/#{application}.conf Include directives:
 #  Include /etc/httpd/sites-available/okcra_api.conf.d/rewrite[-ssl]*
@@ -14,6 +20,9 @@ node[:deploy].each do |application, deploy|
 
   # directory to drop config files into
   # ensure names are local[-ssl]* or rewrite[-ssl]*
+  # naming seems weird
+  #  non-ssl vhost will include all files while ssl vhost only gets ssl.  
+  #  i.e. no way to specify files used exclusively by non-ssl vhost?
   vhost_config_dir = "#{node[:apache][:dir]}/sites-available/#{application}.conf.d"
 
   directory vhost_config_dir do
