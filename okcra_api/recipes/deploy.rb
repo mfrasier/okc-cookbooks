@@ -4,6 +4,7 @@ include_recipe 'apache2'
 
 # install any packages needed
 package "php5-pgsql" do
+  package_name 'php-pgsql'
   action :install
 end
 
@@ -82,9 +83,6 @@ node[:deploy].each do |application, deploy|
   	group node[:apache][:group]
   	mode "0755"
   	action :create
-    only_if do
-
-    end
   end
 
   file "#{deploy['deploy_to']}/current/app/storage/logs/laravel.log" do
