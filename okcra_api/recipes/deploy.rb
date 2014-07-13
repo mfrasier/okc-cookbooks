@@ -32,7 +32,21 @@ node[:deploy].each do |application, deploy|
     action :create
   end
 
-  template "#{vhost_config_dir}/local_okc_env.conf" do
+  # permanent redirect from http to https
+  template "#{vhost_config_dir}/local_redirect2https.conf" do
+    source 'redirect.conf.erb'
+    owner 'root'
+    group 'root'
+    mode  '0644'
+    variables ({
+      :application => application,
+      :deploy => deploy
+    })
+    action :create
+    notifies :restart, "service[apache2]"
+  end
+
+  template "#{vhost_config_dir}/local-ssl_okc_env.conf" do
   	source 'okc_env.conf.erb'
     mode '0640'
     owner deploy[:user]
@@ -44,20 +58,6 @@ node[:deploy].each do |application, deploy|
     only_if do
       File.exists?("#{deploy[:deploy_to]}/shared/config")
     end
-  end
-  
-  # permanent redirect from http to https
-  template "#{vhost_config_dir}/local_redirect2https.conf" do
-  	source 'redirect.conf.erb'
-    owner 'root'
-    group 'root'
-    mode  '0644'
-    variables ({
-      :application => application,
-    	:deploy => deploy
-    })
-    action :create
-    notifies :restart, "service[apache2]"
   end
 
   # rewrite (.*) to /index.php$1
@@ -73,7 +73,7 @@ node[:deploy].each do |application, deploy|
   # enable php5 mcrypt module for laravel
   execute "php5enmod mcrypt" do
    	command "php5enmod mcrypt"
-   	#creates "/etc/php5/apache2/conf.d/20-mcrypt,ini on ubutnu"
+   	#creates "/etc/php5/apache2/conf.d/20-mcrypt,ini on ubutnu, at least"
    	action :run
    end
 
