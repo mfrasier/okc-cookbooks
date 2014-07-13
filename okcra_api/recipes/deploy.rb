@@ -4,7 +4,7 @@ include_recipe 'apache2'
 
 # install any packages needed
 package "php5-pgsql" do
-  package_name 'php-pgsql'
+  package_name 'php5-pgsql'
   action :install
 end
 
